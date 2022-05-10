@@ -7,17 +7,21 @@ using Kicker.ImageRecognition.ImageTransformation;
 var stopWatch = new Stopwatch();
 stopWatch.Start();
 var homography = new Homography()
-    .SetOriginFrame(new(450, 180), new(1120, 70), new(1310, 930), new(600, 1060))
+    .SetOriginFrame(new(447, 185), new(1123, 70), new(1316, 930), new(603, 1060))
     .SetTargetFrame(700, 1000)
     .CalculateHomographyMatrix()
     .CalculateTranslationMap();
 stopWatch.Stop();
 Console.WriteLine(stopWatch.ElapsedMilliseconds);
 
-var originalBitmap = new Bitmap("~/Desktop/cards.jpeg");
+var sourceImagePath = @"C:\Users\login\OneDrive\Desktop\cards.jfif";
+if (!File.Exists(sourceImagePath))
+    throw new Exception("wtf");
+
+var originalBitmap = new Bitmap(sourceImagePath);
 
 var translatedBitmap = originalBitmap.AsImageTransformation()
                                      .AsHomographyTranslated(homography)
                                      .ToBitmap();
 
-translatedBitmap.Save("~/Desktop/cards2.jpeg", ImageFormat.Jpeg);
+translatedBitmap.Save(@"C:\Users\login\OneDrive\Desktop\cards2.jpeg", ImageFormat.Jpeg);

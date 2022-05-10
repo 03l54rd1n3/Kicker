@@ -4,19 +4,37 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.ImageRecognition", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.TestConsole", "Kicker.TestConsole\Kicker.TestConsole.csproj", "{E26F3A24-D61F-4DE0-8036-619306B6C9C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{B87A7822-6B84-4F5E-B576-C25261BB6328}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.ImageRecognition.Benchmarks", "Kicker.ImageRecognition.Benchmarks\Kicker.ImageRecognition.Benchmarks.csproj", "{F885C99B-FAC5-41D5-9D4C-79A8406533D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{03A27F2C-0489-42E8-9625-B5BEA2985126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.ImageRecognition.Tests", "Kicker.ImageRecognition.Tests\Kicker.ImageRecognition.Tests.csproj", "{F8401F9E-4540-416E-AC58-6C2333DE959F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Debug|x64 = Debug|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Release|x64.ActiveCfg = Release|x64
+		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Release|x64.Build.0 = Release|x64
+		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Debug|x64.ActiveCfg = Debug|x64
+		{B7CCCF9B-8DFC-484C-BC0A-77085880AEB2}.Debug|x64.Build.0 = Debug|x64
+		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Release|x64.ActiveCfg = Release|x64
+		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Release|x64.Build.0 = Release|x64
+		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Debug|x64.ActiveCfg = Debug|x64
+		{E26F3A24-D61F-4DE0-8036-619306B6C9C0}.Debug|x64.Build.0 = Debug|x64
+		{F885C99B-FAC5-41D5-9D4C-79A8406533D4}.Debug|x64.ActiveCfg = Release|x64
+		{F885C99B-FAC5-41D5-9D4C-79A8406533D4}.Debug|x64.Build.0 = Release|x64
+		{F885C99B-FAC5-41D5-9D4C-79A8406533D4}.Release|x64.ActiveCfg = Release|x64
+		{F885C99B-FAC5-41D5-9D4C-79A8406533D4}.Release|x64.Build.0 = Release|x64
+		{F8401F9E-4540-416E-AC58-6C2333DE959F}.Release|x64.ActiveCfg = Release|x64
+		{F8401F9E-4540-416E-AC58-6C2333DE959F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F885C99B-FAC5-41D5-9D4C-79A8406533D4} = {B87A7822-6B84-4F5E-B576-C25261BB6328}
+		{F8401F9E-4540-416E-AC58-6C2333DE959F} = {03A27F2C-0489-42E8-9625-B5BEA2985126}
 	EndGlobalSection
 EndGlobal
