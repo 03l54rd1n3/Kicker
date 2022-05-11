@@ -6,11 +6,11 @@ using Kicker.ImageRecognition.ImageTransformation;
 
 var stopWatch = new Stopwatch();
 stopWatch.Start();
-var homography = new Homography()
+using var homography = new Homography()
     .SetOriginFrame(new(447, 185), new(1123, 70), new(1316, 930), new(603, 1060))
     .SetTargetFrame(700, 1000)
-    .CalculateHomographyMatrix()
-    .CalculateTranslationMap();
+    .CalculateHomographyMatrix()!
+    .CalculateTranslationMap()!;
 stopWatch.Stop();
 Console.WriteLine(stopWatch.ElapsedMilliseconds);
 

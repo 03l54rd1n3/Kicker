@@ -2,5 +2,9 @@
 
 using BenchmarkDotNet.Running;
 using Kicker.ImageRecognition.Benchmarks;
+using Kicker.ImageRecognition.Benchmarks.ImageTransformation;
 
-BenchmarkRunner.Run<HomographyBenchmarks>();
+//BenchmarkRunner.Run<HomographyCalculationBenchmarks>();
+//BenchmarkRunner.Run<HomographyTransformBenchmarks>();
+//BenchmarkRunner.Run<BitmapBenchmarks>();
+BenchmarkRunner.Run<MemorizationBenchmarks>();

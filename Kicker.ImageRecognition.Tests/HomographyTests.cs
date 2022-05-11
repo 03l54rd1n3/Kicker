@@ -15,13 +15,12 @@ public class HomographyTests
         var bottomRight = new Point(size - 1, size + size / 5 - 1);
         var bottomLeft = new Point(0, size -1);
         
-        var homography = new Homography()
+        // Act
+        using var homography = new Homography()
             .SetOriginFrame(topLeft, topRight, bottomRight, bottomLeft)
             .SetTargetFrame(size, size)
-            .CalculateHomographyMatrix();
-        
-        // Act
-        homography = homography.CalculateTranslationMap();
+            .CalculateHomographyMatrix()! 
+            .CalculateTranslationMap()!;
 
         // Assert
         var translationMap = new Point[size, size];

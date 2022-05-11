@@ -2,21 +2,21 @@ using System.Drawing;
 
 namespace Kicker.ImageRecognition.ImageTransformation;
 
-internal class MemorizedImageTransformation : ImageTransformationBase
+internal class FastMemorizedImageTransformation : ImageTransformationBase
 {
     private readonly IImageTransformation _source;
-    private readonly Bitmap _bitmap;
+    private readonly DirectBitmap _directBitmap;
     private int _pixelsFilled;
     
     public override int Width => _source.Width;
     public override int Height => _source.Height;
 
-    public MemorizedImageTransformation(
+    public FastMemorizedImageTransformation(
         IImageTransformation source)
     {
         _source = source;
-        _bitmap = new Bitmap(Width, Height);
-        using var graphics = Graphics.FromImage(_bitmap);
+        _directBitmap = new DirectBitmap(Width, Height);
+        using var graphics = Graphics.FromImage(_directBitmap.Bitmap);
         graphics.Clear(Color.Transparent);
     }
 
@@ -24,11 +24,11 @@ internal class MemorizedImageTransformation : ImageTransformationBase
         int x,
         int y)
     {
-        var color = _bitmap.GetPixel(x, y);
+        var color = _directBitmap.GetPixel(x, y);
         if (color.A == 0)
         {
             color = _source.At(x, y);
-            _bitmap.SetPixel(x, y, color);
+            _directBitmap.SetPixel(x, y, color);
             _pixelsFilled++;
         }
 
@@ -42,19 +42,19 @@ internal class MemorizedImageTransformation : ImageTransformationBase
             for (var x = 0; x < Width; x++)
             {
                 if (_pixelsFilled == Width * Height)
-                    return _bitmap;
+                    return _directBitmap.Bitmap;
 
                 At(x, y);
             }
         }
 
-        return _bitmap;
+        return _directBitmap.Bitmap;
     }
 
     protected override void Dispose(
         bool disposing)
     {
-        _bitmap.Dispose();
+        _directBitmap.Dispose();
         _source.Dispose();
     }
 }

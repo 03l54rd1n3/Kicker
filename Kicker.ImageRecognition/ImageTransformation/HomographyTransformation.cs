@@ -27,4 +27,11 @@ internal class HomographyTransformation : ImageTransformationBase
         var pointInOrigin = _homography.Translate(x, y);
         return _source.At(pointInOrigin.X, pointInOrigin.Y);
     }
+
+    protected override void Dispose(
+        bool disposing)
+    {
+        _homography.Dispose();
+        _source.Dispose();
+    }
 }

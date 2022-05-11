@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Text;
 
 namespace Kicker.ImageRecognition.ImageTransformation;
 
@@ -32,5 +33,22 @@ internal abstract class ImageTransformationBase : IImageTransformation
         }
 
         return bitmap;
+    }
+
+    public override string ToString() =>
+        new StringBuilder(GetType().Name)
+            .Append(':')
+            .Append(Width)
+            .Append('x')
+            .Append(Height)
+            .ToString();
+
+    protected abstract void Dispose(
+        bool disposing);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

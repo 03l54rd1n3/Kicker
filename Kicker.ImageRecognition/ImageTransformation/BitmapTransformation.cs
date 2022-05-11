@@ -25,4 +25,10 @@ internal class BitmapTransformation : ImageTransformationBase
 
     public override Bitmap ToBitmap()
         => _bitmap;
+
+    protected override void Dispose(
+        bool disposing)
+    {
+        _bitmap?.Dispose();
+    }
 }
