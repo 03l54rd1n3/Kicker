@@ -1,13 +1,14 @@
 using System.Drawing;
+using Kicker.ImageRecognition.Imaging;
 
 namespace Kicker.ImageRecognition.ImageTransformation;
 
 public static class ImageTransformationExtensions
 {
     public static IImageTransformation AsImageTransformation(
-        this Bitmap bitmap)
+        this Bitmap? bitmap)
         => new BitmapTransformation(bitmap);
-    
+
     public static IImageTransformation AsImageTransformation(
         this DirectBitmap directBitmap)
         => new DirectBitmapTransformation(directBitmap);
@@ -20,8 +21,12 @@ public static class ImageTransformationExtensions
     public static IImageTransformation AsMemorized(
         this IImageTransformation source)
         => new MemorizedImageTransformation(source);
-    
+
     public static IImageTransformation AsFastMemorized(
         this IImageTransformation source)
         => new FastMemorizedImageTransformation(source);
+
+    public static IImageTransformation AsGrayscale(
+        this IImageTransformation source)
+        => new GrayscaleTransformation(source);
 }

@@ -20,7 +20,7 @@ internal abstract class ImageTransformationBase : IImageTransformation
         int x,
         int y);
 
-    public virtual Bitmap ToBitmap()
+    public virtual Bitmap? ToBitmap()
     {
         var bitmap = new Bitmap(Width, Height);
 

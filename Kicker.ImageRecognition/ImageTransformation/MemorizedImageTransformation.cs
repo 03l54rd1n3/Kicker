@@ -5,7 +5,7 @@ namespace Kicker.ImageRecognition.ImageTransformation;
 internal class MemorizedImageTransformation : ImageTransformationBase
 {
     private readonly IImageTransformation _source;
-    private readonly Bitmap _bitmap;
+    private readonly Bitmap? _bitmap;
     private int _pixelsFilled;
     
     public override int Width => _source.Width;
@@ -35,7 +35,7 @@ internal class MemorizedImageTransformation : ImageTransformationBase
         return color;
     }
 
-    public override Bitmap ToBitmap()
+    public override Bitmap? ToBitmap()
     {
         for (var y = 0; y < Height; y++)
         {

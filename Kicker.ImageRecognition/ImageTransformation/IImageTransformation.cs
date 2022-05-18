@@ -11,5 +11,5 @@ public interface IImageTransformation : IDisposable
         int x,
         int y);
 
-    Bitmap ToBitmap();
+    Bitmap? ToBitmap();
 }

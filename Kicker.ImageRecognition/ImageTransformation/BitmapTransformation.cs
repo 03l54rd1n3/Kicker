@@ -4,13 +4,13 @@ namespace Kicker.ImageRecognition.ImageTransformation;
 
 internal class BitmapTransformation : ImageTransformationBase
 {
-    private readonly Bitmap _bitmap;
+    private readonly Bitmap? _bitmap;
 
     public override int Width => _bitmap.Width;
     public override int Height => _bitmap.Height;
     
     public BitmapTransformation(
-        Bitmap bitmap)
+        Bitmap? bitmap)
     {
         _bitmap = bitmap;
     }
@@ -23,7 +23,7 @@ internal class BitmapTransformation : ImageTransformationBase
         return _bitmap.GetPixel(x, y);
     }
 
-    public override Bitmap ToBitmap()
+    public override Bitmap? ToBitmap()
         => _bitmap;
 
     protected override void Dispose(

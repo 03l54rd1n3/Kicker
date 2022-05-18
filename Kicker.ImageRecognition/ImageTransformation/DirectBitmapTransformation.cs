@@ -1,4 +1,5 @@
 using System.Drawing;
+using Kicker.ImageRecognition.Imaging;
 
 namespace Kicker.ImageRecognition.ImageTransformation;
 
@@ -23,7 +24,7 @@ internal class DirectBitmapTransformation : ImageTransformationBase
         return _directBitmap.GetPixel(x, y);
     }
 
-    public override Bitmap ToBitmap()
+    public override Bitmap? ToBitmap()
         => _directBitmap.Bitmap;
 
     protected override void Dispose(
