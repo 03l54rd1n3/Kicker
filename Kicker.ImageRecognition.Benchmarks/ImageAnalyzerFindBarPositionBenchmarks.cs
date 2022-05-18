@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 using Kicker.ImageRecognition.ImageProcessing;
+using Kicker.ImageRecognition.Imaging;
 using Kicker.Shared;
 
 namespace Kicker.ImageRecognition.Benchmarks;
@@ -11,30 +12,31 @@ namespace Kicker.ImageRecognition.Benchmarks;
 [RankColumn]
 public class ImageAnalyzerFindBarPositionBenchmarks
 {
-    private Bitmap? _bitmap;
+    private IImage? _image;
     private ImageAnalyzer? _imageAnalyzer;
 
     [GlobalSetup]
     public void GlobalSetup()
     {
-        _bitmap = (Bitmap) Bitmap.FromFile(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker (Small).jpeg");
+        var bitmap = (Bitmap) Bitmap.FromFile(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker (Small).jpeg");
+        _image = new BitmapWrapper(bitmap);
 
         var shortDistanceHomography = new Homography()
             .SetOriginFrame(
-                new Point(666, 9),
-                new Point(708, 9),
-                new Point(731, 466),
-                new Point(687, 467))
+                new PointS(666, 9),
+                new PointS(708, 9),
+                new PointS(731, 466),
+                new PointS(687, 467))
             .SetTargetFrame(45, 457)
             .CalculateHomographyMatrix()!
             .CalculateTranslationMap()!;
 
         var maxDistanceHomography = new Homography()
             .SetOriginFrame(
-                new Point(147, 18),
-                new Point(191, 17),
-                new Point(200, 473),
-                new Point(155, 475))
+                new PointS(147, 18),
+                new PointS(191, 17),
+                new PointS(200, 473),
+                new PointS(155, 475))
             .SetTargetFrame(45, 457)
             .CalculateHomographyMatrix()!
             .CalculateTranslationMap()!;
@@ -49,28 +51,28 @@ public class ImageAnalyzerFindBarPositionBenchmarks
     [GlobalCleanup]
     public void GlobalCleanup()
     {
-        _bitmap?.Dispose();
+        _image?.Dispose();
         _imageAnalyzer?.Dispose();
     }
 
     [Benchmark(Baseline = true)]
     public float ShortDistance()
     {
-        _imageAnalyzer.Bitmap = _bitmap;
+        _imageAnalyzer.Image = _image;
         return _imageAnalyzer!.FindBarPosition(Bar.Two);
     }
 
     [Benchmark]
     public float MaxDistance()
     {
-        _imageAnalyzer.Bitmap = _bitmap;
+        _imageAnalyzer.Image = _image;
         return _imageAnalyzer!.FindBarPosition(Bar.Three);
     }
 
     [Benchmark]
     public (float, float) Consecutive()
     {
-        _imageAnalyzer.Bitmap = _bitmap;
+        _imageAnalyzer.Image = _image;
         var float1 = _imageAnalyzer!.FindBarPosition(Bar.Two);
         var float2 = _imageAnalyzer!.FindBarPosition(Bar.Three);
         return (float1, float2);
@@ -79,7 +81,7 @@ public class ImageAnalyzerFindBarPositionBenchmarks
     [Benchmark]
     public async Task<(float, float)> WhenAll()
     {
-        _imageAnalyzer.Bitmap = _bitmap;
+        _imageAnalyzer.Image = _image;
         var float1Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.Two));
         var float2Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.Three));
 

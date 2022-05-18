@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Kicker.ImageRecognition.Imaging;
 using Kicker.ImageRecognition.Masking;
 
 namespace Kicker.ImageRecognition.ImageProcessing;
@@ -8,9 +8,9 @@ public class ImageProcessor : IDisposable
     private readonly Homography _homography;
     private readonly IMask[] _masks;
 
-    public Bitmap? Bitmap { get; set; }
-    public int Height => _homography.Height;
-    public int Width => _homography.Width;
+    public IImage? Image { get; set; }
+    public short Height => _homography.Height;
+    public short Width => _homography.Width;
 
     public ImageProcessor(
         Homography homography,
@@ -21,22 +21,22 @@ public class ImageProcessor : IDisposable
     }
 
     public Color GetColor(
-        int x,
-        int y)
+        short x,
+        short y)
     {
-        if (Bitmap is null)
-            throw new InvalidOperationException(nameof(Bitmap) + "is null");
+        if (Image is null)
+            throw new InvalidOperationException(nameof(Image) + "is null");
 
         var translatedPoint = _homography.Translate(x, y);
         if (IsMasked(translatedPoint.X, translatedPoint.Y))
             return Color.Black;
 
-        return Bitmap.GetPixel(translatedPoint.X, translatedPoint.Y);
+        return Image.GetPixel(translatedPoint.X, translatedPoint.Y);
     }
 
     public byte GetGrayscale(
-        int x,
-        int y)
+        short x,
+        short y)
     {
         var color = GetColor(x, y);
         var grayscale = (byte) Math.Floor((0.3f * color.R) + (0.59f * color.G) + (0.11f * color.B));
@@ -44,8 +44,8 @@ public class ImageProcessor : IDisposable
     }
 
     public byte GetHighContrast(
-        int x,
-        int y,
+        short x,
+        short y,
         byte threshold)
     {
         var grayscale = GetGrayscale(x, y);
@@ -58,8 +58,8 @@ public class ImageProcessor : IDisposable
     }
 
     private bool IsMasked(
-        int x,
-        int y)
+        short x,
+        short y)
     {
         foreach (var mask in _masks)
         {

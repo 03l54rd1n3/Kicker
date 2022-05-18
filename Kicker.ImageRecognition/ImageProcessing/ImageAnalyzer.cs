@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Drawing;
+using Kicker.ImageRecognition.Imaging;
 using Kicker.ImageRecognition.Masking;
 using Kicker.Shared;
 
@@ -14,18 +14,18 @@ public class ImageAnalyzer : IDisposable
     private ImageProcessor? _fiveImageProcessor;
     private ImageProcessor? _threeImageProcessor;
     private ImageProcessor? _fullImageProcessor;
-    private Bitmap? _bitmap;
+    private IImage? _image;
 
-    public Bitmap? Bitmap
+    public IImage? Image
     {
-        get => _bitmap;
+        get => _image;
         set
         {
-            _bitmap = value;
-            _oneImageProcessor.Bitmap = value;
-            _twoImageProcessor.Bitmap = value;
-            _fiveImageProcessor.Bitmap = value;
-            _threeImageProcessor.Bitmap = value;
+            _image = value;
+            _oneImageProcessor.Image = value;
+            _twoImageProcessor.Image = value;
+            _fiveImageProcessor.Image = value;
+            _threeImageProcessor.Image = value;
         }
     }
 
@@ -57,15 +57,15 @@ public class ImageAnalyzer : IDisposable
     public float FindBarPosition(
         Bar bar)
     {
-        const int minimumPixelThreshold = 5;
-        const int xOffset = 19;
+        const short minimumPixelThreshold = 5;
+        const short xOffset = 19;
         const byte colorThreshold = 100;
         var imageProcessor = GetBarImageProcessor(bar) ?? throw new InvalidOperationException("Bar not initialized");
 
-        for (var y = 0; y < imageProcessor.Height / 2; y++)
-        for (var side = 0; side < 2; side++)
+        for (short y = 0; y < imageProcessor.Height / 2; y++)
+        for (byte side = 0; side < 2; side++)
         {
-            var currentY = side == 0 ? y : imageProcessor.Height - 1 - y;
+            var currentY = unchecked((short) (side == 0 ? y : imageProcessor.Height - 1 - y));
             var x = xOffset;
             for (; x < xOffset + minimumPixelThreshold; x++)
             {
@@ -94,8 +94,8 @@ public class ImageAnalyzer : IDisposable
 
     private float CalculateBarPosition(
         Bar bar,
-        int height,
-        int y)
+        short height,
+        short y)
     {
         var offset = _halfBarLengths[bar];
         var position = (float) y / height + offset;

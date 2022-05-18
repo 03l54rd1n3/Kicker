@@ -2,15 +2,15 @@
 
 public class CircleMask : MaskBase
 {
-    private readonly int _x;
-    private readonly int _y;
-    private readonly int _r;
+    private readonly short _x;
+    private readonly short _y;
+    private readonly short _r;
     private readonly float _rSquared;
 
     public CircleMask(
-        int x,
-        int y,
-        int r)
+        short x,
+        short y,
+        short r)
     {
         _x = x;
         _y = y;
@@ -19,22 +19,22 @@ public class CircleMask : MaskBase
     }
 
     protected override bool ContainsInternal(
-        int x,
-        int y)
+        short x,
+        short y)
     {
         var distanceSquared = MathF.Pow(_x - x, 2) + MathF.Pow(_y - y, 2);
         return distanceSquared <= _rSquared;
     }
 
-    protected override IEnumerable<(int X, int Y)> GetPossiblePoints(
-        int width,
-        int height)
+    protected override IEnumerable<(short X, short Y)> GetPossiblePoints(
+        short width,
+        short height)
     {
-        var startX = Math.Max(_x - _r, 0);
-        var endX = Math.Min(_x + _r, width);
+        var startX = unchecked((short) Math.Max(_x - _r, 0));
+        var endX = unchecked((short) Math.Min(_x + _r, width));
 
-        var startY = Math.Max(_y - _r, 0);
-        var endY = Math.Min(_y + _r, height);
+        var startY = unchecked((short) Math.Max(_y - _r, 0));
+        var endY = unchecked((short) Math.Min(_y + _r, height));
 
         for (var y = startY; y < endY; y++)
         for (var x = startX; x < endX; x++)

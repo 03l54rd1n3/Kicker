@@ -1,22 +1,21 @@
 ﻿// https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
 // This code contributed by PrinciRaj1992
-using System.Drawing;
 
 namespace Kicker.Shared;
 
 public static class Geometry
 {
-    public static Boolean OnSegment(
-        Point p,
-        Point q,
-        Point r)
+    public static bool OnSegment(
+        PointS p,
+        PointS q,
+        PointS r)
         => q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
            q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y);
 
-    public static int GetOrientation(
-        Point p,
-        Point q,
-        Point r)
+    public static short GetOrientation(
+        PointS p,
+        PointS q,
+        PointS r)
     {
         var val = (q.Y - p.Y) * (r.X - q.X) -
                   (q.X - p.X) * (r.Y - q.Y);
@@ -24,14 +23,14 @@ public static class Geometry
         if (val == 0)
             return 0;
 
-        return (val > 0) ? 1 : 2;
+        return unchecked((short)(val > 0 ? 1 : 2));
     }
 
     public static bool DoIntersect(
-        Point p1,
-        Point q1,
-        Point p2,
-        Point q2)
+        PointS p1,
+        PointS q1,
+        PointS p2,
+        PointS q2)
     {
         var o1 = GetOrientation(p1, q1, p2);
         var o2 = GetOrientation(p1, q1, q2);

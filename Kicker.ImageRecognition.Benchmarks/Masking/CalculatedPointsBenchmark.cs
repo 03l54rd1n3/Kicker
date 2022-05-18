@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Drawing;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 using Kicker.ImageRecognition.Masking;
+using Kicker.Shared;
 
 namespace Kicker.ImageRecognition.Benchmarks.Masking;
 
@@ -11,13 +10,13 @@ namespace Kicker.ImageRecognition.Benchmarks.Masking;
 [RankColumn]
 public class CalculatedPointsBenchmark
 {
-    private const int ImageSize = 100;
-    private HashSet<Point> _pointHashSet;
-    private HashSet<(int, int)> _tupleHashSet;
-    private List<Point> _pointList;
-    private List<(int, int)> _tupleList;
-    private Point[] _pointArray;
-    private (int, int)[] _tupleArray;
+    private const short ImageSize = 100;
+    private HashSet<PointS> _pointHashSet;
+    private HashSet<(short, short)> _tupleHashSet;
+    private List<PointS> _pointList;
+    private List<(short, short)> _tupleList;
+    private PointS[] _pointArray;
+    private (short, short)[] _tupleArray;
     private HashSet<int> _intHashSet;
     private List<int> _intList;
     private int[] _intArray;
@@ -28,21 +27,21 @@ public class CalculatedPointsBenchmark
     [GlobalSetup]
     public void GlobalSetup()
     {
-        _pointHashSet = new HashSet<Point>();
-        _tupleHashSet = new HashSet<(int, int)>();
-        _pointList = new List<Point>();
-        _tupleList = new List<(int, int)>();
+        _pointHashSet = new HashSet<PointS>();
+        _tupleHashSet = new HashSet<(short, short)>();
+        _pointList = new List<PointS>();
+        _tupleList = new List<(short, short)>();
         _intHashSet = new HashSet<int>();
         _intList = new List<int>();
 
         var polygonMask = GetPolygonMask();
 
-        for (var y = 0; y < ImageSize; y++)
-        for (var x = 0; x < ImageSize; x++)
+        for (short y = 0; y < ImageSize; y++)
+        for (short x = 0; x < ImageSize; x++)
         {
             if (polygonMask.Contains(x, y))
             {
-                var point = new Point(x, y);
+                var point = new PointS(x, y);
                 var tuple = (x, y);
                 var @int = x * 10000 + y;
 
@@ -115,14 +114,14 @@ public class CalculatedPointsBenchmark
     }
 
     private int Benchmark(
-        ICollection<Point> collection)
+        ICollection<PointS> collection)
     {
         var count = 0;
 
-        for (var y = 0; y < ImageSize; y++)
-        for (var x = 0; x < ImageSize; x++)
+        for (short y = 0; y < ImageSize; y++)
+        for (short x = 0; x < ImageSize; x++)
         {
-            var point = new Point(x, y);
+            var point = new PointS(x, y);
             if (UseLinq)
             {
                 if (collection.Contains(point))
@@ -143,12 +142,12 @@ public class CalculatedPointsBenchmark
     }
 
     private int Benchmark(
-        ICollection<(int, int)> collection)
+        ICollection<(short, short)> collection)
     {
         var count = 0;
 
-        for (var y = 0; y < ImageSize; y++)
-        for (var x = 0; x < ImageSize; x++)
+        for (short y = 0; y < ImageSize; y++)
+        for (short x = 0; x < ImageSize; x++)
         {
             var tuple = (x, y);
             if (UseLinq)
@@ -200,7 +199,7 @@ public class CalculatedPointsBenchmark
 
     private static PolygonMask GetPolygonMask()
     {
-        var points = new Point[]
+        var points = new PointS[]
         {
             new(80, 10),
             new(95, 20),

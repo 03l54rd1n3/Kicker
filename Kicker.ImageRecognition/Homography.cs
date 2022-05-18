@@ -1,35 +1,35 @@
 using System.Buffers;
-using System.Drawing;
 using System.Numerics;
 using HomographySharp;
+using Kicker.Shared;
 
 namespace Kicker.ImageRecognition;
 
 public class Homography : IDisposable
 {
-    public int Width { get; private set; }
-    public int Height { get; private set; }
+    public short Width { get; private set; }
+    public short Height { get; private set; }
 
     private bool _originFrameSet;
     private bool _targetFrameSet;
-    
+
     private Vector2 _originTopLeft;
     private Vector2 _originTopRight;
     private Vector2 _originBottomRight;
     private Vector2 _originBottomLeft;
 
     private HomographyMatrix<float>? _homographyMatrix;
-    private Point[]? _translationMap;
+    private PointS[]? _translationMap;
 
     public Homography SetOriginFrame(
-        Point topLeft,
-        Point topRight,
-        Point bottomRight,
-        Point bottomLeft)
+        PointS topLeft,
+        PointS topRight,
+        PointS bottomRight,
+        PointS bottomLeft)
     {
         if (_originFrameSet)
             throw new InvalidOperationException("Already initialized");
-        
+
         _originTopLeft = new Vector2(topLeft.X, topLeft.Y);
         _originTopRight = new Vector2(topRight.X, topRight.Y);
         _originBottomRight = new Vector2(bottomRight.X, bottomRight.Y);
@@ -41,21 +41,21 @@ public class Homography : IDisposable
     }
 
     public Homography SetTargetFrame(
-        int width,
-        int height)
+        short width,
+        short height)
     {
         if (_targetFrameSet)
             throw new InvalidOperationException("Already initialized");
-        
+
         Width = width;
         Height = height;
-        
+
         _targetFrameSet = true;
 
         return this;
     }
 
-    public Homography? CalculateHomographyMatrix()
+    public Homography CalculateHomographyMatrix()
     {
         if (!_originFrameSet || !_targetFrameSet)
             throw new InvalidOperationException("Origin or target frame not set");
@@ -69,27 +69,27 @@ public class Homography : IDisposable
         points[1] = _originTopRight;
         points[2] = _originBottomRight;
         points[3] = _originBottomLeft;
-        
+
         points[4] = new Vector2(0, 0);
         points[5] = new Vector2(Width - 1, 0);
         points[6] = new Vector2(Width - 1, Height - 1);
         points[7] = new Vector2(0, Height - 1);
 
         _homographyMatrix = HomographySharp.Homography.Find(points.AsSpan(4..8), points.AsSpan(..4)); // Inverse
-        
+
         arrayPool.Return(points);
         return this;
     }
 
-    public Homography? CalculateTranslationMap()
+    public Homography CalculateTranslationMap()
     {
         if (_homographyMatrix is null)
             throw new InvalidOperationException($"{nameof(_homographyMatrix)} not calculated");
-        
+
         if (_translationMap is not null)
             throw new InvalidOperationException("Already initialized");
 
-        var arrayPool = ArrayPool<Point>.Shared;
+        var arrayPool = ArrayPool<PointS>.Shared;
         _translationMap = arrayPool.Rent(Height * Width);
 
         for (var y = 0; y < Height; y++)
@@ -97,18 +97,18 @@ public class Homography : IDisposable
             for (var x = 0; x < Width; x++)
             {
                 var point2 = _homographyMatrix.Translate(x, y);
-                var pointX = (int)Math.Round(point2.X);
-                var pointY = (int)Math.Round(point2.Y);
-                _translationMap[(y * Width) + x] = new Point(pointX, pointY);
+                var pointX = unchecked((short)Math.Round(point2.X));
+                var pointY = unchecked((short)Math.Round(point2.Y));
+                _translationMap[(y * Width) + x] = new PointS(pointX, pointY);
             }
         }
 
         return this;
     }
 
-    public Point Translate(
-        int x,
-        int y)
+    public PointS Translate(
+        short x,
+        short y)
     {
         if (_translationMap is null)
             throw new InvalidOperationException("Not initialized");
@@ -120,8 +120,8 @@ public class Homography : IDisposable
     {
         if (_homographyMatrix is not null)
             _homographyMatrix = null;
-        
+
         if (_translationMap is not null)
-            ArrayPool<Point>.Shared.Return(_translationMap);
+            ArrayPool<PointS>.Shared.Return(_translationMap);
     }
 }

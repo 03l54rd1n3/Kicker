@@ -1,16 +1,15 @@
-﻿using System.Drawing;
-using Kicker.Shared;
+﻿using Kicker.Shared;
 
 namespace Kicker.ImageRecognition.Masking;
 
 public class PolygonMask : MaskBase
 {
-    private readonly int _imageWidth;
-    private readonly Point[] _points;
+    private readonly short _imageWidth;
+    private readonly PointS[] _points;
 
     public PolygonMask(
-        int imageWidth,
-        params Point[] points)
+        short imageWidth,
+        params PointS[] points)
     {
         if (points.Length < 2)
             throw new ArgumentException("Invalid number of points", nameof(points));
@@ -20,11 +19,11 @@ public class PolygonMask : MaskBase
     }
 
     protected override bool ContainsInternal(
-        int x,
-        int y)
+        short x,
+        short y)
     {
-        var pointLineStart = new Point(x, y);
-        var pointLineEnd = new Point(_imageWidth, y);
+        var pointLineStart = new PointS(x, y);
+        var pointLineEnd = new PointS(_imageWidth, y);
         var countOfIntersects = 0;
 
         for (var i = 1; i < _points.Length; i++)
@@ -45,9 +44,9 @@ public class PolygonMask : MaskBase
         return countOfIntersects % 2 == 1;
     }
 
-    protected override IEnumerable<(int X, int Y)> GetPossiblePoints(
-        int width,
-        int height)
+    protected override IEnumerable<(short X, short Y)> GetPossiblePoints(
+        short width,
+        short height)
     {
         var startX = _points.Min(_ => _.X);
         var endX = _points.Max(_ => _.X);

@@ -7,8 +7,8 @@ public abstract class MaskBase : IMask
     public bool IsCalculated { get; private set; }
 
     public virtual bool Contains(
-        int x,
-        int y)
+        short x,
+        short y)
     {
         if (IsCalculated)
             return _containedPoints!.Contains(x * 10000 + y);
@@ -17,8 +17,8 @@ public abstract class MaskBase : IMask
     }
 
     public virtual void Calculate(
-        int width,
-        int height)
+        short width,
+        short height)
     {
         if (IsCalculated)
             throw new InvalidOperationException("Already calculated");
@@ -33,12 +33,12 @@ public abstract class MaskBase : IMask
     }
 
     protected abstract bool ContainsInternal(
-        int x,
-        int y);
+        short x,
+        short y);
 
-    protected abstract IEnumerable<(int X, int Y)> GetPossiblePoints(
-        int width,
-        int height);
+    protected abstract IEnumerable<(short X, short Y)> GetPossiblePoints(
+        short width,
+        short height);
 
     protected virtual void Dispose(
         bool disposing)

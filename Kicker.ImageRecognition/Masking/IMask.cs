@@ -5,10 +5,10 @@ public interface IMask : IDisposable
     bool IsCalculated { get; }
 
     bool Contains(
-        int x,
-        int y);
+        short x,
+        short y);
 
     void Calculate(
-        int width,
-        int height);
+        short width,
+        short height);
 }

@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 using Kicker.ImageRecognition.Masking;
+using Kicker.Shared;
 
 namespace Kicker.ImageRecognition.Benchmarks.Masking;
 
@@ -10,7 +10,7 @@ namespace Kicker.ImageRecognition.Benchmarks.Masking;
 [RankColumn]
 public class MaskBenchmarks
 {
-    private const int ImageSize = 100;
+    private const short ImageSize = 100;
     private IMask _circleMask;
     private IMask _ringMask;
     private IMask _polygonMask;
@@ -50,8 +50,8 @@ public class MaskBenchmarks
     {
         var count = 0;
 
-        for (var y = 0; y < ImageSize; y++)
-        for (var x = 0; x < ImageSize; x++)
+        for (short y = 0; y < ImageSize; y++)
+        for (short x = 0; x < ImageSize; x++)
             if (mask.Contains(x, y))
                 count++;
 
@@ -60,7 +60,7 @@ public class MaskBenchmarks
 
     private static PolygonMask GetPolygonMask()
     {
-        var points = new Point[]
+        var points = new PointS[]
         {
             new(80, 10),
             new(95, 20),

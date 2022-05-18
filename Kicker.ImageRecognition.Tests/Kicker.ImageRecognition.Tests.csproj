@@ -31,4 +31,8 @@
       <ProjectReference Include="..\Kicker.ImageRecognition\Kicker.ImageRecognition.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="__snapshots__" />
+    </ItemGroup>
+
 </Project>
