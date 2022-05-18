@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{03A27F2C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.ImageRecognition.Tests", "Kicker.ImageRecognition.Tests\Kicker.ImageRecognition.Tests.csproj", "{F8401F9E-4540-416E-AC58-6C2333DE959F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kicker.Shared", "Kicker.Shared\Kicker.Shared.csproj", "{8DC64A8C-F563-4537-B2EC-1A63491D428E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -34,6 +36,8 @@ Global
 		{F8401F9E-4540-416E-AC58-6C2333DE959F}.Release|x64.Build.0 = Release|x64
 		{F8401F9E-4540-416E-AC58-6C2333DE959F}.Debug|x64.ActiveCfg = Debug|x64
 		{F8401F9E-4540-416E-AC58-6C2333DE959F}.Debug|x64.Build.0 = Debug|x64
+		{8DC64A8C-F563-4537-B2EC-1A63491D428E}.Release|x64.ActiveCfg = Release|x64
+		{8DC64A8C-F563-4537-B2EC-1A63491D428E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F885C99B-FAC5-41D5-9D4C-79A8406533D4} = {B87A7822-6B84-4F5E-B576-C25261BB6328}
