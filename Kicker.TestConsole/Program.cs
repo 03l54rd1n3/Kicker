@@ -1,27 +1,40 @@
-﻿using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using Kicker.ImageRecognition;
-using Kicker.ImageRecognition.ImageTransformation;
+using Kicker.ImageRecognition.ImageProcessing;
+using Kicker.ImageRecognition.Masking;
+using Kicker.Shared;
 
-var stopWatch = new Stopwatch();
-stopWatch.Start();
-using var homography = new Homography()
-    .SetOriginFrame(new(447, 185), new(1123, 70), new(1316, 930), new(603, 1060))
-    .SetTargetFrame(700, 1000)
+const int size = 100;
+
+var homography = new Homography()
+    .SetOriginFrame(
+        new Point(147, 18),
+        new Point(191, 17),
+        new Point(200, 473),
+        new Point(155, 475))
+    .SetTargetFrame(45, 457)
     .CalculateHomographyMatrix()!
     .CalculateTranslationMap()!;
-stopWatch.Stop();
-Console.WriteLine(stopWatch.ElapsedMilliseconds);
 
-var sourceImagePath = @"C:\Users\login\OneDrive\Desktop\cards.jfif";
-if (!File.Exists(sourceImagePath))
-    throw new Exception("wtf");
+using var imageProcessor = new ImageProcessor(homography);
+imageProcessor.Bitmap = (Bitmap) Bitmap.FromFile(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker 2 (Small).jpeg");
 
-var originalBitmap = new Bitmap(sourceImagePath);
+var bitmap = new Bitmap(45, 457);
 
-var translatedBitmap = originalBitmap.AsImageTransformation()
-                                     .AsHomographyTranslated(homography)
-                                     .ToBitmap();
+for (var y = 0; y < imageProcessor.Height; y++)
+for (var x = 0; x < imageProcessor.Width; x++)
+{
+    var grayscale = imageProcessor.GetHighContrast(x, y, 100);
+    var color = grayscale == 0 ? Color.Black : Color.White;
+    bitmap.SetPixel(x, y, color);
+}
 
-translatedBitmap.Save(@"C:\Users\login\OneDrive\Desktop\cards2.jpeg", ImageFormat.Jpeg);
+bitmap.Save(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker 2 (Small).png", ImageFormat.Png);
+
+var imageAnalyzer = new ImageAnalyzer();
+imageAnalyzer.InitializeBar(Bar.Two, (float) 210 / 457, homography);
+imageAnalyzer.Bitmap = imageProcessor.Bitmap;
+
+var position = imageAnalyzer.FindBarPosition(Bar.Two);
+Console.WriteLine(position);
