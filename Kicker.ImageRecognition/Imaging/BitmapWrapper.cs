@@ -43,6 +43,9 @@ public class BitmapWrapper : IImage
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        lock (_lock)
+        {
+            _bitmap?.Dispose();
+        }
     }
 }
