@@ -11,14 +11,17 @@ public class ColorTests
         var random = new Random();
         var randomInt = random.Next();
         var systemDrawing = System.Drawing.Color.FromArgb(randomInt);
-        var custom = Color.FromSystemDrawing(systemDrawing);
+        var custom1 = Color.FromSystemDrawing(systemDrawing);
+        var custom2 = new Color(randomInt);
 
         // Act
-        var actual = custom.Value;
+        var actual1 = custom1.Value;
+        var actual2 = custom2.Value;
 
         // Assert
         Assert.Equal(systemDrawing.ToArgb(), randomInt);
-        Assert.Equal(systemDrawing.ToArgb(), actual);
+        Assert.Equal(systemDrawing.ToArgb(), actual1);
+        Assert.Equal(systemDrawing.ToArgb(), actual2);
     }
 
     [Fact]

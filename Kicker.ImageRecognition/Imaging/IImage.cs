@@ -2,8 +2,8 @@
 
 public interface IImage : IDisposable
 {
-    int Width { get; }
-    int Height { get; }
+    short Width { get; }
+    short Height { get; }
 
     Color GetPixel(
         short x,

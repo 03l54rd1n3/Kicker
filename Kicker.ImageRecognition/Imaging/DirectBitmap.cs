@@ -6,17 +6,17 @@ namespace Kicker.ImageRecognition.Imaging;
 
 public class DirectBitmap : IImage
 {
-    public Bitmap? Bitmap { get; private set; }
+    public Bitmap Bitmap { get; private set; }
     public int[] Bits { get; private set; }
     public bool Disposed { get; private set; }
-    public int Height { get; private set; }
-    public int Width { get; private set; }
+    public short Height { get; }
+    public short Width { get; }
 
     protected GCHandle BitsHandle { get; private set; }
 
     public DirectBitmap(
-        int width,
-        int height)
+        short width,
+        short height)
     {
         Width = width;
         Height = height;
@@ -29,7 +29,7 @@ public class DirectBitmap : IImage
         short x,
         short y)
     {
-        var index = x + (y * Width);
+        var index = x + y * Width;
         var col = Bits[index];
         return new Color(col);
     }
@@ -39,7 +39,7 @@ public class DirectBitmap : IImage
         short y,
         Color color)
     {
-        var index = x + (y * Width);
+        var index = x + y * Width;
         var col = color.Value;
 
         Bits[index] = col;

@@ -7,13 +7,15 @@ public class BitmapWrapper : IImage
     private object _lock = new();
     private readonly Bitmap _bitmap;
 
-    public int Width => _bitmap.Width;
-    public int Height => _bitmap.Height;
+    public short Width { get; }
+    public short Height { get; }
 
     public BitmapWrapper(
         Bitmap bitmap)
     {
         _bitmap = bitmap;
+        Width = unchecked((short) bitmap.Width);
+        Height = unchecked((short) bitmap.Height);
     }
 
     public Color GetPixel(

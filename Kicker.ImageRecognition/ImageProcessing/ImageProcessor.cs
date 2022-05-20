@@ -5,19 +5,34 @@ namespace Kicker.ImageRecognition.ImageProcessing;
 
 public class ImageProcessor : IDisposable
 {
-    private readonly Homography _homography;
-    private readonly IMask[] _masks;
+    private const byte ColorFilterThreshold = 25;
+    private readonly List<IMask> _masks = new();
+    private readonly List<(Color Input, Color Output)> _colorFilters = new();
+    private Homography? _homography;
 
     public IImage? Image { get; set; }
-    public short Height => _homography.Height;
-    public short Width => _homography.Width;
+    public short Height => _homography!.Height;
+    public short Width => _homography!.Width;
 
-    public ImageProcessor(
-        Homography homography,
-        params IMask[] masks)
+    public ImageProcessor SetHomography(
+        Homography homography)
     {
         _homography = homography;
-        _masks = masks;
+        return this;
+    }
+
+    public ImageProcessor AddMasks(
+        params IMask[] masks)
+    {
+        _masks.AddRange(masks);
+        return this;
+    }
+
+    public ImageProcessor AddColorFilters(
+        params (Color Input, Color Output)[] colorFilters)
+    {
+        _colorFilters.AddRange(colorFilters);
+        return this;
     }
 
     public Color GetColor(
@@ -31,7 +46,8 @@ public class ImageProcessor : IDisposable
         if (IsMasked(translatedPoint.X, translatedPoint.Y))
             return Color.Black;
 
-        return Image.GetPixel(translatedPoint.X, translatedPoint.Y);
+        var color = Image.GetPixel(translatedPoint.X, translatedPoint.Y);
+        return ApplyColorFilters(color, ColorFilterThreshold);
     }
 
     public byte GetGrayscale(
@@ -68,5 +84,18 @@ public class ImageProcessor : IDisposable
         }
 
         return false;
+    }
+
+    private Color ApplyColorFilters(
+        Color color,
+        byte threshold)
+    {
+        foreach (var colorFilter in _colorFilters)
+        {
+            if (color.IsCloseTo(colorFilter.Input, threshold))
+                return colorFilter.Output;
+        }
+
+        return color;
     }
 }

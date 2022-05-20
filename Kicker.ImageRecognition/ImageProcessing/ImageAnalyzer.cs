@@ -37,7 +37,10 @@ public class ImageAnalyzer : IDisposable
     {
         _halfBarLengths[bar] = length / 2;
 
-        var imageProcessor = new ImageProcessor(homography, masks);
+        var imageProcessor =
+            new ImageProcessor()
+                .SetHomography(homography)
+                .AddMasks(masks);
 
         _ = bar switch
         {
@@ -49,10 +52,18 @@ public class ImageAnalyzer : IDisposable
         };
     }
 
-    public void InitializeFullImageProcessor(
+    public void InitializeFullImageProcessing(
         Homography homography,
+        short ballRadius,
         params IMask[] masks)
-        => _fullImageProcessor = new ImageProcessor(homography, masks);
+    {
+        _fullImageProcessor =
+            new ImageProcessor()
+                .SetHomography(homography)
+                .AddMasks(masks);
+
+        var circleFinder = new HoughTransformCircleFinder(_fullImageProcessor, ballRadius);
+    }
 
     public float FindBarPosition(
         Bar bar)

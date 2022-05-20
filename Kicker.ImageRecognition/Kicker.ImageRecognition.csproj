@@ -17,4 +17,16 @@
       <ProjectReference Include="..\Kicker.Shared\Kicker.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Kicker.ImageRecognition.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Kicker.ImageRecognition.Benchmarks</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
 </Project>

@@ -18,7 +18,10 @@ var homography = new Homography()
     .CalculateHomographyMatrix()!
     .CalculateTranslationMap()!;
 
-using var imageProcessor = new ImageProcessor(homography);
+using var imageProcessor =
+    new ImageProcessor()
+        .SetHomography(homography);
+
 var bitmap = (Bitmap) Bitmap.FromFile(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker 2 (Small).jpeg");
 imageProcessor.Image = new BitmapWrapper(bitmap);
 bitmap = new Bitmap(45, 457);
