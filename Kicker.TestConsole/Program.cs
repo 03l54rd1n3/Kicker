@@ -37,8 +37,8 @@ for (short x = 0; x < imageProcessor.Width; x++)
 bitmap.Save(@"C:\Users\mmertens\OneDrive - cleverbridge.com\Desktop\kicker 2 (Small).png", ImageFormat.Png);
 
 var imageAnalyzer = new ImageAnalyzer();
-imageAnalyzer.InitializeBar(Bar.Two, (float) 210 / 457, homography);
+imageAnalyzer.InitializeBar(BarType.Two, (float) 210 / 457, homography);
 imageAnalyzer.Image = imageProcessor.Image;
 
-var position = imageAnalyzer.FindBarPosition(Bar.Two);
+var position = imageAnalyzer.FindBarPosition(BarType.Two);
 Console.WriteLine(position);

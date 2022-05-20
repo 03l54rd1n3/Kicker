@@ -7,7 +7,7 @@ namespace Kicker.ImageRecognition.ImageProcessing;
 
 public class ImageAnalyzer : IDisposable
 {
-    private readonly ConcurrentDictionary<Bar, float> _halfBarLengths = new();
+    private readonly ConcurrentDictionary<BarType, float> _halfBarLengths = new();
 
     private ImageProcessor? _oneImageProcessor;
     private ImageProcessor? _twoImageProcessor;
@@ -30,25 +30,25 @@ public class ImageAnalyzer : IDisposable
     }
 
     public void InitializeBar(
-        Bar bar,
+        BarType barType,
         float length,
         Homography homography,
         params IMask[] masks)
     {
-        _halfBarLengths[bar] = length / 2;
+        _halfBarLengths[barType] = length / 2;
 
         var imageProcessor =
             new ImageProcessor()
                 .SetHomography(homography)
                 .AddMasks(masks);
 
-        _ = bar switch
+        _ = barType switch
         {
-            Bar.One => _oneImageProcessor = imageProcessor,
-            Bar.Two => _twoImageProcessor = imageProcessor,
-            Bar.Five => _fiveImageProcessor = imageProcessor,
-            Bar.Three => _threeImageProcessor = imageProcessor,
-            _ => throw new ArgumentOutOfRangeException(nameof(bar), bar, null)
+            BarType.One => _oneImageProcessor = imageProcessor,
+            BarType.Two => _twoImageProcessor = imageProcessor,
+            BarType.Five => _fiveImageProcessor = imageProcessor,
+            BarType.Three => _threeImageProcessor = imageProcessor,
+            _ => throw new ArgumentOutOfRangeException(nameof(barType), barType, null)
         };
     }
 
@@ -66,12 +66,12 @@ public class ImageAnalyzer : IDisposable
     }
 
     public float FindBarPosition(
-        Bar bar)
+        BarType barType)
     {
         const short minimumPixelThreshold = 5;
         const short xOffset = 19;
         const byte colorThreshold = 100;
-        var imageProcessor = GetBarImageProcessor(bar) ?? throw new InvalidOperationException("Bar not initialized");
+        var imageProcessor = GetBarImageProcessor(barType) ?? throw new InvalidOperationException("Bar not initialized");
 
         for (short y = 0; y < imageProcessor.Height / 2; y++)
         for (byte side = 0; side < 2; side++)
@@ -86,29 +86,29 @@ public class ImageAnalyzer : IDisposable
             }
 
             if (x == xOffset + minimumPixelThreshold)
-                return CalculateBarPosition(bar, imageProcessor.Height, currentY);
+                return CalculateBarPosition(barType, imageProcessor.Height, currentY);
         }
 
         return float.NaN;
     }
 
     private ImageProcessor? GetBarImageProcessor(
-        Bar bar)
-        => bar switch
+        BarType barType)
+        => barType switch
         {
-            Bar.One => _oneImageProcessor,
-            Bar.Two => _twoImageProcessor,
-            Bar.Five => _fiveImageProcessor,
-            Bar.Three => _threeImageProcessor,
-            _ => throw new ArgumentOutOfRangeException(nameof(bar), bar, null),
+            BarType.One => _oneImageProcessor,
+            BarType.Two => _twoImageProcessor,
+            BarType.Five => _fiveImageProcessor,
+            BarType.Three => _threeImageProcessor,
+            _ => throw new ArgumentOutOfRangeException(nameof(barType), barType, null),
         };
 
     private float CalculateBarPosition(
-        Bar bar,
+        BarType barType,
         short height,
         short y)
     {
-        var offset = _halfBarLengths[bar];
+        var offset = _halfBarLengths[barType];
         var position = (float) y / height + offset;
 
         if (y > height / 2)

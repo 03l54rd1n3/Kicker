@@ -55,10 +55,10 @@ public class ImageAnalyzerFindBarPositionBenchmarks
             .CalculateTranslationMap()!;
 
         _imageAnalyzer = new ImageAnalyzer();
-        _imageAnalyzer.InitializeBar(Bar.One, (float) 210 / 457, maxDistanceHomography);
-        _imageAnalyzer.InitializeBar(Bar.Two, (float) 210 / 457, shortDistanceHomography);
-        _imageAnalyzer.InitializeBar(Bar.Five, (float) 210 / 457, maxDistanceHomography);
-        _imageAnalyzer.InitializeBar(Bar.Three, (float) 210 / 457, maxDistanceHomography);
+        _imageAnalyzer.InitializeBar(BarType.One, (float) 210 / 457, maxDistanceHomography);
+        _imageAnalyzer.InitializeBar(BarType.Two, (float) 210 / 457, shortDistanceHomography);
+        _imageAnalyzer.InitializeBar(BarType.Five, (float) 210 / 457, maxDistanceHomography);
+        _imageAnalyzer.InitializeBar(BarType.Three, (float) 210 / 457, maxDistanceHomography);
     }
 
     [GlobalCleanup]
@@ -72,14 +72,14 @@ public class ImageAnalyzerFindBarPositionBenchmarks
     public float ShortDistance()
     {
         _imageAnalyzer.Image = _image;
-        return _imageAnalyzer!.FindBarPosition(Bar.Two);
+        return _imageAnalyzer!.FindBarPosition(BarType.Two);
     }
 
     [Benchmark]
     public float MaxDistance()
     {
         _imageAnalyzer.Image = _image;
-        return _imageAnalyzer!.FindBarPosition(Bar.Three);
+        return _imageAnalyzer!.FindBarPosition(BarType.Three);
     }
 
     [Benchmark]
@@ -88,10 +88,10 @@ public class ImageAnalyzerFindBarPositionBenchmarks
         _imageAnalyzer.Image = _image;
         var floats = new float[4];
 
-        floats[0] = _imageAnalyzer!.FindBarPosition(Bar.One);
-        floats[1] = _imageAnalyzer!.FindBarPosition(Bar.Two);
-        floats[2] = _imageAnalyzer!.FindBarPosition(Bar.Five);
-        floats[3] = _imageAnalyzer!.FindBarPosition(Bar.Three);
+        floats[0] = _imageAnalyzer!.FindBarPosition(BarType.One);
+        floats[1] = _imageAnalyzer!.FindBarPosition(BarType.Two);
+        floats[2] = _imageAnalyzer!.FindBarPosition(BarType.Five);
+        floats[3] = _imageAnalyzer!.FindBarPosition(BarType.Three);
 
         return floats;
     }
@@ -100,10 +100,10 @@ public class ImageAnalyzerFindBarPositionBenchmarks
     public async Task<float[]> WhenAll()
     {
         _imageAnalyzer.Image = _image;
-        var float1Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.One));
-        var float2Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.Two));
-        var float3Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.Five));
-        var float4Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(Bar.Three));
+        var float1Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(BarType.One));
+        var float2Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(BarType.Two));
+        var float3Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(BarType.Five));
+        var float4Task = Task.Run(() => _imageAnalyzer!.FindBarPosition(BarType.Three));
 
         return await Task.WhenAll(float1Task, float2Task, float3Task, float4Task);
     }
@@ -115,10 +115,10 @@ public class ImageAnalyzerFindBarPositionBenchmarks
         var floats = new float[4];
 
         Parallel.Invoke(
-            () => floats[0] = _imageAnalyzer!.FindBarPosition(Bar.One),
-            () => floats[1] = _imageAnalyzer!.FindBarPosition(Bar.Two),
-            () => floats[2] = _imageAnalyzer!.FindBarPosition(Bar.Five),
-            () => floats[3] = _imageAnalyzer!.FindBarPosition(Bar.Three));
+            () => floats[0] = _imageAnalyzer!.FindBarPosition(BarType.One),
+            () => floats[1] = _imageAnalyzer!.FindBarPosition(BarType.Two),
+            () => floats[2] = _imageAnalyzer!.FindBarPosition(BarType.Five),
+            () => floats[3] = _imageAnalyzer!.FindBarPosition(BarType.Three));
 
         return floats;
     }

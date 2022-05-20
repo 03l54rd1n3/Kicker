@@ -1,6 +1,6 @@
 ﻿namespace Kicker.Shared;
 
-public enum Bar
+public enum BarType
 {
     One = 1,
     Two = 2,
